@@ -12,26 +12,9 @@ namespace FileSequencer
             InitializeComponent();
         }
 
-        private void cbfDragDropCopyToB(object sender, DragEventArgs e)
-        {
-            Debug.WriteLine("cbfDragDropCopyToB");
-            string[] destList = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (destList != null)
-            {
-                foreach (string destFile in destList)
-                {
-                    foreach(string srcFile in zeFiles)
-                    {
-                        Debug.Write("Copy ");
-                        Debug.Write(srcFile);
-                        Debug.Write(" To ");
-                        Debug.WriteLine(destFile);
-                    }
-                }
-            }
-        }
 
-        private void cbfDragEnterCopyToB(object sender, DragEventArgs e)
+
+        private void cbfDragEnterCopyOrMoveToB(object sender, DragEventArgs e)
         {
             Debug.WriteLine("cbfDragEnterCopyToB");
             string[] destList = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -58,46 +41,40 @@ namespace FileSequencer
                 }
             }
         }
+        enum TransferType
+        {
+            Copy,
+            Move
+        };
+
+        private void CopyOrMoveFiles(TransferType transfer, DragEventArgs e)
+        {
+            string[] destList = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (destList != null)
+            {
+
+                foreach (string srcFile in zeFiles)
+                {
+                    if (transfer == TransferType.Move) Debug.Write("Move ");
+                    if (transfer == TransferType.Copy) Debug.Write("Copy ");
+                    Debug.Write(srcFile);
+                    Debug.Write(" To ");
+                    Debug.WriteLine(destList[0]);
+                }
+
+            }
+        }
 
         private void cbfDragDropMoveToB(object sender, DragEventArgs e)
         {
             Debug.WriteLine("cbfDragDropMoveToB");
-            string[] destList = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (destList != null)
-            {
-                foreach (string file in destList)
-                {
-                    Debug.WriteLine(file); 
-                }
-            }
+            CopyOrMoveFiles(TransferType.Move, e);
         }
 
-        private void cbfDragEnterMoveToB(object sender, DragEventArgs e)
+        private void cbfDragDropCopyToB(object sender, DragEventArgs e)
         {
-            Debug.WriteLine("cbfDragEnterMoveToB");
-            string[] destList = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (destList != null)
-            {
-                // check if only one item selected
-                if(destList.Length > 1)
-                {
-                    e.Effect = DragDropEffects.None;
-                    return;
-                }
-
-                // check if this item is a directory 
-                FileInfo thisFileInfo = new FileInfo(destList[0]);
-                if(thisFileInfo.Attributes == FileAttributes.Directory)
-                {
-                    e.Effect = DragDropEffects.Copy;
-                    return;
-                }
-                else
-                {
-                    e.Effect = DragDropEffects.None;
-                    return; 
-                }
-            }
+            Debug.WriteLine("cbfDragDropCopyToB");
+            CopyOrMoveFiles(TransferType.Copy, e);
         }
 
         private void cbfDragDropFromA(object sender, DragEventArgs e)

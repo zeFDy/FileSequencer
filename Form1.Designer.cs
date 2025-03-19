@@ -73,7 +73,7 @@
             groupBoxACopy.Text = "Copy to B";
             groupBoxACopy.AllowDrop = true;
             groupBoxACopy.DragDrop += cbfDragDropCopyToB;
-            groupBoxACopy.DragEnter += cbfDragEnterCopyToB;
+            groupBoxACopy.DragEnter += cbfDragEnterCopyOrMoveToB;
             // 
             // groupBoxAMove
             // 
@@ -85,7 +85,7 @@
             groupBoxAMove.Text = "Move to B";
             groupBoxAMove.AllowDrop = true;
             groupBoxAMove.DragDrop += cbfDragDropMoveToB;
-            groupBoxAMove.DragEnter += cbfDragEnterMoveToB;
+            groupBoxAMove.DragEnter += cbfDragEnterCopyOrMoveToB;
             // 
             // groupBoxToB
             // 
